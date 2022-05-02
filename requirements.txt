@@ -1,0 +1,8 @@
+pytorch-lightning==1.5.9
+torch>=1.11
+torchvision>=0.8.2
+pipe
+mlflow>=1.24.0
+numpy
+opencv-python
+Pillow
