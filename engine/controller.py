@@ -28,9 +28,9 @@ class Controller(pytorch_lightning.LightningModule):
     def __init__(self, config):
         super(Controller, self).__init__()
         self.config = config
-        self.vae = self.config.vae()
-        self.generator = self.config.generator()
-        self.discriminator = self.config.discriminator()
+        self.vae = self.config.get_vae()
+        self.generator = self.config.get_generator()
+        self.discriminator = self.config.get_discriminator()
         self.distribution = torch.distributions.Normal(0, 1)
         self.reg_param = self.config.get('reg_param', 10.)
         self.w_info = self.config.get('w_info', 0.001)
@@ -39,7 +39,7 @@ class Controller(pytorch_lightning.LightningModule):
 
     def training_step(self, batch, batch_idx) -> STEP_OUTPUT:
         optimizers: List[LightningOptimizer] = self.optimizers()
-        x = batch['x']
+        x = batch['x'].requires_grad_()
         z = self.distribution.sample((x.shape[0], self.config.get('z_dim', 256))).to(x.device)
 
         # Discriminator
@@ -54,7 +54,7 @@ class Controller(pytorch_lightning.LightningModule):
         with torch.no_grad():
             c, c_mu, c_logvar = self.vae(x, encode_only=True)
             x_gen = self.generator(torch.cat([z, c], dim=1))
-
+        x_gen.requires_grad_()
         gen_pred = self.discriminator(x_gen)
         dloss_gen = F.binary_cross_entropy_with_logits(
             gen_pred,
