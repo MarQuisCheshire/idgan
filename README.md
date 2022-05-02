@@ -7,4 +7,5 @@ The dataset that was used for the training and evaluation can be accessed here h
 
 
 main_vae.py for training Beta-Vae (use with config2.py in configs)
+
 main.py for training GAN (use with config1.py in configs)
