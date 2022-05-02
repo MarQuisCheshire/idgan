@@ -87,7 +87,7 @@ def train_dataloader():
 
 
 def val_dataloader():
-    return DataLoader(val, test_batch_size, num_workers=4, prefetch_factor=3)
+    return DataLoader(val, test_batch_size, num_workers=0)
 
 
 output = Path('results')

@@ -7,7 +7,6 @@ import torchvision.models.mobilenetv2
 from torch.utils.data import DataLoader
 
 from data_loading import Subset, CelebADataset
-from losses import VAELossWrapper
 from models.mini_models import BetaVAE_H
 
 seed = 123
@@ -23,6 +22,8 @@ val_augmentation = torchvision.transforms.Compose([
     torchvision.transforms.Resize((64, 64)),
     torchvision.transforms.ToTensor(),
 ])
+
+alpha = 10.
 
 dataset = CelebADataset(Path('../img_align_celeba'))
 
@@ -47,10 +48,6 @@ test_batch_size = 64
 def model():
     model_ = BetaVAE_H(c_dim=20)
     return model_
-
-
-def loss(config, model_):
-    return VAELossWrapper(config, model_)
 
 
 def optimizer(model_):
