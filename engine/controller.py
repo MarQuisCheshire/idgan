@@ -93,6 +93,7 @@ class Controller(pytorch_lightning.LightningModule):
 
     def validation_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
         self._evaluate(outputs)
+        self.logger.experiment.log_artifacts(self.logger.run_id, self.config.output)
 
     def test_step(self, batch, batch_idx) -> Optional[STEP_OUTPUT]:
         return self.validation_step(batch, batch_idx)
